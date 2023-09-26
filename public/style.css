@@ -1,0 +1,173 @@
+body {
+    margin: 0; /* Entfernen Sie den standardmäßigen Seitenrand */
+    padding: 0; /* Entfernen Sie den standardmäßigen Innenabstand */
+    background: linear-gradient(to right top, #C9D9F2, #4a72b3b6, #e60049bb);
+    /* Andere Stile für das <body>-Element */
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    text-align: center;
+    color: white;
+}
+
+
+.container{
+    padding : 20px;
+    margin: none;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    text-align: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.listcontainer{
+display : flex;
+justify-content: center;
+padding: 10px;
+margin: 1%;
+flex-direction: column;
+}
+
+.List{
+
+    display: flex;
+    flex-direction: column; /* Elemente in Spaltenrichtung anordnen */
+    align-items: center; /* Elemente horizontal zentrieren */
+    margin-bottom: 20px; /* Abstand zwischen den Listenelementen hinzufügen */
+
+}
+
+.Tskbtn{
+    
+    align-items: center;
+    background: linear-gradient(#4a72b3b6, #263b5eb6);
+    color: #fff;
+    font-size: 16px;
+    outline: 50px;
+    border: 1px solid ;
+    border-color:#263b5eb6;
+    border-radius: 10px;
+    padding:20px 60px;
+    min-width: 80%;
+    margin: 10px 20px 10px 20px ;
+}
+
+.Lstbtn{
+    
+    align-items: center;
+    background: linear-gradient(#e60049bb, #a00134bb);
+    color: #fff;
+    font-size: 16px;
+    outline: 50px;
+    border: 1px solid ;
+    border-color:#a00134bb;
+    border-radius: 10px;
+    padding:20px 60px;
+    min-width: 80%;
+    margin: 10px 20px 10px 20px ;
+}
+
+.Tskbtn:hover{
+    background: linear-gradient(#1e3150b6, #0e1c33b6);
+    cursor: pointer;
+    border-color:white;
+}
+
+.Lstbtn:hover{
+    background: linear-gradient(#83012abb, #5a011dbb);
+    cursor: pointer;
+    border-color:white;
+}
+
+
+.addlstbtn{
+    
+    align-items: center;
+    background: linear-gradient(#5684ce, #4a72b3);
+    color: #fff;
+    font-size: 16px;
+    outline: 0;
+    border: 0;
+    border-radius: 20px;
+    padding:15px 25px;
+    margin: 30px 0 20px;
+}
+
+.addlstbtn:hover{
+    background: linear-gradient(#334e7a, #21324e); 
+    cursor: pointer;
+}
+
+.addtskbtn{
+    
+    align-items: center;
+    background: linear-gradient(#5684ce, #4a72b3);
+    color: #fff;
+    font-size: 16px;
+    outline: 0;
+    border: 0;
+    border-radius: 20px;
+    padding:15px 25px;
+    margin: 30px 0 20px;
+}
+
+.addtskbtn:hover{
+    background: linear-gradient(#334e7a, #21324e); 
+    cursor: pointer;
+}
+
+
+.backbtn{
+    
+    align-items: center;
+    background: linear-gradient(#FF427E, #99274b);
+    color: #fff;
+    font-size: 16px;
+    outline: 0;
+    border: 0;
+    border-radius: 20px;
+    padding:15px 25px;
+    margin: 30px 0 20px;
+}
+
+.backbtn:hover{
+    background: linear-gradient(#771f3b, #501527); 
+    cursor: pointer;
+}
+
+.header-box{
+    position: relative;
+    width: 80%;
+    max-width: 500px;
+    min-height: 10px;
+    background: #fff;
+    color: #333;
+    padding: 20px;
+    margin: auto;
+    outline: none;
+    border-radius: 5px;
+     
+}
+
+.content-box{
+    position: relative;
+    width: 80%;
+    max-width: 500px;
+    min-height: 120px;
+    background: #fff;
+    color: #333;
+    padding: 20px;
+    margin: auto;
+    outline: none;
+    border-radius: 5px;
+     
+}
+
+h3{
+    margin: 0px;
+    padding: 0px;
+    text-align: center;
+}
+
+
+h1{
+    color: white;
+}
