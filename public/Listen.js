@@ -1,7 +1,4 @@
 
-//test ob git funktioniert
-
-
 const Listendiv = document.getElementById("Listendiv");
 
 let globalList;
@@ -12,19 +9,24 @@ let currentListid = "";
 let currentTaskid = "";
 let updateTasksjs = [{}];
 let addtaskjs = [{}];
+let addlstjs = [{}];
 
 async function addlists() {
   await getLists();
   let anzahllisten = globalList.value.length;
   for (let i = 0; i < anzahllisten; i++) {
     const Listenbutton = document.createElement("button");
+    
 
+    
     Listenbutton.classList.add("Lstbtn");
+
+    
     Listenbutton.setAttribute('id', i);
     Listenbutton.textContent = globalList.value[i].displayName;
 
     Listendiv.appendChild(Listenbutton);
-
+    
     listenid.push(globalList.value[i].id);
 
     // Den Eventlistener an den Button anhängen
@@ -36,6 +38,70 @@ async function addlists() {
     });
   }
 
+  //hinzufügen
+  const addlst = document.createElement("button");
+  addlst.textContent = "neue Liste hinzufügen";
+  addlst.classList.add("addlstbtn");
+  Listendiv.appendChild(addlst);
+
+  addlst.addEventListener("click", async function(){
+
+    let elements = document.querySelectorAll(".Lstbtn, .addlstbtn");
+    elements.forEach(element => {
+      element.parentNode.removeChild(element);
+    });
+
+    const header = document.createElement("h3");
+    const headerbox = document.createElement("p");
+    const savebutton = document.createElement("button");
+    const backbutton = document.createElement("button");
+
+    headerbox.contentEditable = "true";
+    header.textContent = "Titel";
+    savebutton.textContent = "Speichern";
+    backbutton.textContent = "Zurück";
+
+    headerbox.classList.add("header-box");
+    savebutton.classList.add("addlstbtn");
+    backbutton.classList.add("backbtn");
+
+    header.classList.add("TskchgSite");
+    headerbox.classList.add("TskchgSite");
+    savebutton.classList.add("TskchgSite");
+    backbutton.classList.add("TskchgSite");
+
+    Listendiv.appendChild(header);
+    Listendiv.appendChild(headerbox);
+    Listendiv.appendChild(savebutton);
+    Listendiv.appendChild(backbutton);
+
+    savebutton.addEventListener("click", async function(){
+
+      addlstjs = {
+
+        displayName: headerbox.textContent 
+      };
+
+
+      await postLists(addlstjs);
+
+      let elements = document.querySelectorAll(".TskchgSite");
+    elements.forEach(element => {
+      element.parentNode.removeChild(element);
+    });
+
+
+    await addlists();
+
+
+
+
+    })
+
+
+
+  })
+
   console.log(listenid);
   console.log(listenid[1]);
 }
@@ -43,10 +109,10 @@ async function addlists() {
 
 
 async function addTasks() {
-  let elements = document.getElementsByClassName("Lstbtn");
-  while (elements.length > 0) {
-    elements[0].parentNode.removeChild(elements[0]);          //Löschen der Vorherigen HTML Elemente
-  }
+  let elements = document.querySelectorAll(".Lstbtn, .addlstbtn");
+  elements.forEach(element => {
+    element.parentNode.removeChild(element);
+  });
   let anzahltasks = globalTasksList.value.length;
   console.log(anzahltasks);
   if (anzahltasks === 0) {                                        //falls keine Aufgaben in der Liste vorhanden sind
@@ -247,7 +313,7 @@ async function chgTasks(event) {
 
 
     updateTasksjs = {
-      id: "'" + currentTaskid + "'",
+      id: "'" + currentTaskid + "'" ,
       body: {
         content: contentbox.textContent
         ,

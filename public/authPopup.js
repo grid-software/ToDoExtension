@@ -107,3 +107,16 @@ async function postTasks(addtaskjs) {
     }
   }
 }
+
+async function postLists(addlstjs) {
+  if (myMSALObj.getAccount()) {
+    try {
+      const response = await getTokenPopup(tokenRequest);
+      graphConfig.graphListsUpdateEndpoint = "https://graph.microsoft.com/v1.0/me/todo/lists";
+      console.log(graphConfig.graphListsUpdateEndpoint);
+      await callMSGraphPost(graphConfig.graphListsUpdateEndpoint, response.accessToken, addlstjs, updateUI);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+}
