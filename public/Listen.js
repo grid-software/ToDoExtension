@@ -11,6 +11,8 @@ let updateTasksjs = [{}];
 let addtaskjs = [{}];
 let addlstjs = [{}];
 
+
+
 async function addlists() {
   await getLists();
   let anzahllisten = globalList.value.length;
@@ -24,10 +26,31 @@ async function addlists() {
     
     Listenbutton.setAttribute('id', i);
     Listenbutton.textContent = globalList.value[i].displayName;
+      //delete image
+      var deleteimg = document.createElement('img');
+      deleteimg.src = "delete.png";
+      deleteimg.width = 20;
+      deleteimg.height = 20;
+      deleteimg.alt = "löschen";
+      deleteimg.style = 'float: right';
+      deleteimg.classList.add('invert');
+      Listenbutton.appendChild(deleteimg);
 
     Listendiv.appendChild(Listenbutton);
     
     listenid.push(globalList.value[i].id);
+    
+    Listendiv.addEventListener("click", function (event) {
+      if (event.target.classList.contains("invert")) {
+        // Retrieve the parent button's id
+        const parentButtonId = event.target.parentNode.id;
+        console.log(parentButtonId);
+    
+        // Rest of your code...
+      }
+    });
+        
+
 
     // Den Eventlistener an den Button anhängen
     Listenbutton.addEventListener("click", async function () {
