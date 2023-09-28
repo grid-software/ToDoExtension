@@ -16,6 +16,7 @@ let addlstjs = [{}];
 async function addlists() {
   await getLists();
   let anzahllisten = globalList.value.length;
+  listenid.length = 0; //cleart das arrays
   for (let i = 0; i < anzahllisten; i++) {
     const Listenbutton = document.createElement("button");
     
@@ -34,27 +35,33 @@ async function addlists() {
       deleteimg.alt = "löschen";
       deleteimg.style = 'float: right';
       deleteimg.classList.add('invert');
-      Listenbutton.appendChild(deleteimg);
+      deleteimg.classList.add('deleteimg');
+      deleteimg.setAttribute('id', i);
+      
 
     Listendiv.appendChild(Listenbutton);
+    Listendiv.appendChild(deleteimg);
     
     listenid.push(globalList.value[i].id);
     
-    Listendiv.addEventListener("click", function (event) {
-      if (event.target.classList.contains("invert")) {
-        // Retrieve the parent button's id
+    deleteimg.addEventListener("click", async function () {
+        
         const parentButtonId = event.target.parentNode.id;
-        console.log(parentButtonId);
-    
-        // Rest of your code...
+        currentListid = (listenid[((parseInt(event.target.id)) )]);
+        console.log(event.target.id);
+        console.log(currentListid);
+
+        await deleteLists(currentListid);
+        reloadLists();
+        
       }
-    });
+    );
         
 
 
     // Den Eventlistener an den Button anhängen
     Listenbutton.addEventListener("click", async function () {
-      currentListid = (listenid[((parseInt(event.target.id)) + 1)]);
+      currentListid = (listenid[((parseInt(event.target.id)) )]);
       console.log(currentListid);
       await getTasks(); //notwenidige berechnung da arrays bei 1 anfangen und json nicht
       addTasks();
@@ -69,7 +76,7 @@ async function addlists() {
 
   addlst.addEventListener("click", async function(){
 
-    let elements = document.querySelectorAll(".Lstbtn, .addlstbtn");
+    let elements = document.querySelectorAll(".Lstbtn, .addlstbtn, .deleteimg");
     elements.forEach(element => {
       element.parentNode.removeChild(element);
     });
@@ -115,12 +122,15 @@ async function addlists() {
 
 
     await addlists();
-
-
-
-
     })
 
+    backbutton.addEventListener("click", async function(){
+      let elements = document.querySelectorAll(".TskchgSite");
+    elements.forEach(element => {
+      element.parentNode.removeChild(element);
+    });
+    await addlists();
+    })
 
 
   })
@@ -132,7 +142,7 @@ async function addlists() {
 
 
 async function addTasks() {
-  let elements = document.querySelectorAll(".Lstbtn, .addlstbtn");
+  let elements = document.querySelectorAll(".Lstbtn, .addlstbtn, .deleteimg");
   elements.forEach(element => {
     element.parentNode.removeChild(element);
   });
@@ -147,6 +157,8 @@ async function addTasks() {
     Listendiv.appendChild(Taskbutton);
 
   }
+
+  taskid.length = (0);                          //reset der Taskid liste
 
   for (let i = 0; i < anzahltasks; i++) {                       //Aufzählung der tasks
     const Taskbutton = document.createElement("button");
@@ -299,14 +311,19 @@ async function chgTasks(event) {
   await getTasks();
   console.log(globalTasksList);
 
-  let taskidfin = [(taskid[((parseInt(event.target.id)) + 1)])];
-  let currentTaskid = globalTasksList.value[taskidfin].id;               //zieht sich die Id der Task um damit den Patch zu machen
+  let taskidfin = [];
+  let currentTaskid = [];
+  taskidfin.length = (0);
+  currentTaskid.length = (0);
+
+  taskidfin = [(taskid[((parseInt(event.target.id))  )])];
+  currentTaskid = globalTasksList.value[taskidfin].id;               //zieht sich die Id der Task um damit den Patch zu machen
   console.log(currentTaskid);
   console.log(event.target.id)
   console.log("die taskid ist" + taskidfin);
 
-  headerbox.textContent = globalTasksList.value[(taskid[((parseInt(event.target.id)) + 1)])].title;
-  contentbox.textContent = globalTasksList.value[(taskid[((parseInt(event.target.id)) + 1)])].body.content;
+  headerbox.textContent = globalTasksList.value[(taskid[((parseInt(event.target.id)) )])].title;
+  contentbox.textContent = globalTasksList.value[(taskid[((parseInt(event.target.id)) )])].body.content;
 
   backbutton.textContent = "Zurück";
 
@@ -371,7 +388,15 @@ async function chgTasks(event) {
 
 }
 
+async function reloadLists(){
+  let elements = document.querySelectorAll(".Lstbtn, .addlstbtn, .deleteimg");
+    elements.forEach(element => {
+      element.parentNode.removeChild(element);
+    });
+    await addlists();
 
+
+}
 
 
 

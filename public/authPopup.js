@@ -120,3 +120,17 @@ async function postLists(addlstjs) {
     }
   }
 }
+
+
+async function deleteLists(currentListid) {
+  if (myMSALObj.getAccount()) {
+    try {
+      const response = await getTokenPopup(tokenRequest);
+      graphConfig.graphListsDeleteEndpoint = "https://graph.microsoft.com/v1.0/me/todo/lists/"+ currentListid;
+      console.log(graphConfig.graphListsDeleteEndpoint);
+      await callMSGraphDelete(graphConfig.graphListsDeleteEndpoint, response.accessToken, updateUI);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+}
