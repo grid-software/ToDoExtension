@@ -6,7 +6,7 @@
   
     
     "action": {
-        "default_popup": "index.html",
+        "default_popup": "localhost:3000/",
         "default_title": "To-Do" 
 
     },
