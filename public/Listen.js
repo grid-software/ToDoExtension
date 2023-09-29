@@ -163,13 +163,59 @@ async function addTasks() {
   for (let i = 0; i < anzahltasks; i++) {                       //Aufzählung der tasks
     const Taskbutton = document.createElement("button");
 
+    //Löschbutton
+    var deleteimg = document.createElement('img');
+    deleteimg.src = "delete.png";
+    deleteimg.width = 20;
+    deleteimg.height = 20;
+    deleteimg.alt = "löschen";
+    deleteimg.style = 'float: right';
+    deleteimg.classList.add('invert');
+    deleteimg.classList.add('deleteimg');
+    deleteimg.setAttribute('id', i);
+    //Löschbutton
+
     Taskbutton.classList.add("Tskbtn");
     Taskbutton.setAttribute('id', i);
     Taskbutton.textContent = globalTasksList.value[i].title;
 
     Listendiv.appendChild(Taskbutton);
+    Listendiv.appendChild(deleteimg);
     taskid.push(i);
-  }
+
+    deleteimg.addEventListener("click", async function () {
+      
+    let taskidfin = [];
+    let currentTaskid = [];
+    taskidfin.length = (0);
+    currentTaskid.length = (0);
+
+    taskidfin = [(taskid[((parseInt(event.target.id))  )])];
+    currentTaskid = globalTasksList.value[taskidfin].id; 
+      
+    
+      console.log(event.target.id);
+      console.log(currentTaskid);
+      console.log(currentListid);
+
+      await deleteTask(currentListid,currentTaskid);
+
+      let elements = document.querySelectorAll(".Tskbtn, .backbtn, .addtskbtn, .deleteimg");
+      elements.forEach(element => {
+        element.parentNode.removeChild(element);
+      })          //Löschen der Vorherigen HTML Elemente
+  
+      await getTasks();
+      await addTasks();
+    });
+  
+
+      
+    };
+
+
+
+  
 
 
   // hinzufügen button
@@ -197,7 +243,7 @@ async function addTasks() {
 
 
   backbutton.addEventListener("click", async function () {
-    let elements = document.querySelectorAll(".Tskbtn, .backbtn, .addtskbtn");
+    let elements = document.querySelectorAll(".Tskbtn, .backbtn, .addtskbtn, .deleteimg");
     elements.forEach(element => {
       element.parentNode.removeChild(element);
     })          //Löschen der Vorherigen HTML Elemente
@@ -209,7 +255,7 @@ async function addTasks() {
 
 
   addbutton.addEventListener("click", async function () {
-    let elements = document.querySelectorAll(".Tskbtn, .backbtn, .addtskbtn");
+    let elements = document.querySelectorAll(".Tskbtn, .backbtn, .addtskbtn, .deleteimg");
     elements.forEach(element => {
       element.parentNode.removeChild(element);
     });
@@ -275,18 +321,18 @@ async function addTasks() {
 
 
 
-    })
+    });
 
-  })
-
-
-
+  });
 }
 
 
 
+
+
+
 async function chgTasks(event) {
-  let elements = document.querySelectorAll(".Tskbtn, .backbtn, .addtskbtn");
+  let elements = document.querySelectorAll(".Tskbtn, .backbtn, .addtskbtn, .deleteimg");
   elements.forEach(element => {
     element.parentNode.removeChild(element);
   });

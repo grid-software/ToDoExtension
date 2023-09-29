@@ -134,3 +134,16 @@ async function deleteLists(currentListid) {
     }
   }
 }
+
+async function deleteTask(currentListid,currentTaskid) {
+  if (myMSALObj.getAccount()) {
+    try {
+      const response = await getTokenPopup(tokenRequest);
+      graphConfig.graphTasksDeleteEndpoint = "https://graph.microsoft.com/v1.0/me/todo/lists/"+ currentListid +'/tasks/'+ currentTaskid ;
+      console.log(graphConfig.graphTasksDeleteEndpoint);
+      await callMSGraphDelete(graphConfig.graphTasksDeleteEndpoint, response.accessToken, updateUI);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+}
