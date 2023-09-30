@@ -15,7 +15,11 @@
     "icons": {
         "48": "img/icon.png"
 
-    }
+    },
+
+    "permissions": [
+        "identity"
+    ]
   
    
   }
