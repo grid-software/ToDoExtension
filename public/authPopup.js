@@ -147,3 +147,17 @@ async function deleteTask(currentListid,currentTaskid) {
     }
   }
 }
+
+
+async function editLists(currentListid,updatelistjs) {
+  if (myMSALObj.getAccount()) {
+    try {
+      const response = await getTokenPopup(tokenRequest);
+      graphConfig.graphTasksPatchEndpoint = "https://graph.microsoft.com/v1.0/me/todo/lists/"+ currentListid ;
+      console.log(graphConfig.graphTasksPatchEndpoint);
+      await callMSGraphPatch(graphConfig.graphTasksPatchEndpoint, response.accessToken,updatelistjs, updateUI);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+}

@@ -10,7 +10,7 @@ let currentTaskid = "";
 let updateTasksjs = [{}];
 let addtaskjs = [{}];
 let addlstjs = [{}];
-
+let updatelistjs = [{}];
 
 
 async function addlists() {
@@ -27,6 +27,12 @@ async function addlists() {
     
     Listenbutton.setAttribute('id', i);
     Listenbutton.textContent = globalList.value[i].displayName;
+
+
+      //div für actions
+      var actiondiv = document.createElement("div");
+      actiondiv.sytle = "float: right";
+
       //delete image
       var deleteimg = document.createElement('img');
       deleteimg.src = "delete.png";
@@ -37,14 +43,94 @@ async function addlists() {
       deleteimg.classList.add('invert');
       deleteimg.classList.add('deleteimg');
       deleteimg.setAttribute('id', i);
+
+
+      //edit image
+      var editimage = document.createElement("img");
+      editimage.src = "edit.png";
+      editimage.width = 25;
+      editimage.height = 25;
+      editimage.alt = "editieren";
+      editimage.style ="float.right";
+      editimage.classList.add("editimg");
+      editimage.setAttribute("id", i);
       
 
-    Listendiv.appendChild(Listenbutton);
-    Listendiv.appendChild(deleteimg);
+    actiondiv.appendChild(Listenbutton);
+    actiondiv.appendChild(editimage);
+    actiondiv.appendChild(deleteimg);
+    Listendiv.appendChild(actiondiv);
     
     listenid.push(globalList.value[i].id);
     
+    editimage.addEventListener("click", async function(){
+
+      const parentButtonId = event.target.parentNode.id;
+      currentListid = (listenid[((parseInt(event.target.id)) )]);
+      
+      
+      //Löscht alle elemente aus der Ansicht
+      let elements = document.querySelectorAll(".Lstbtn, .addlstbtn, .deleteimg, .editimg");
+      elements.forEach(element => {
+      element.parentNode.removeChild(element);
+      });
+
+      //erstellt die zu bearbeitende ansicht
+      
+      const header = document.createElement("h3");
+      const headerbox = document.createElement("p");
+      const savebutton = document.createElement("button");
+      const backbutton = document.createElement("button");
+
+      headerbox.contentEditable = "true";
+      header.textContent = "Titel";
+      savebutton.textContent = "Speichern";
+      backbutton.textContent = "Zurück";
+
+      headerbox.classList.add("header-box");
+      savebutton.classList.add("addlstbtn");
+      backbutton.classList.add("backbtn");
+
+      header.classList.add("TskchgSite");
+      headerbox.classList.add("TskchgSite");
+      savebutton.classList.add("TskchgSite");
+      backbutton.classList.add("TskchgSite");
+
+      console.log(listenid);
+      console.log(globalList);
+      headerbox.textContent = globalList.value[(parseInt(event.target.id)) ].displayName;
+
+      Listendiv.appendChild(header);
+      Listendiv.appendChild(headerbox);
+      Listendiv.appendChild(savebutton);
+      Listendiv.appendChild(backbutton);
+
+
+      savebutton.addEventListener("click", async function(){
+
+        updatelistjs = {
+
+          "displayName": headerbox.textContent
+
+        }
+        await editLists(currentListid,updatelistjs);
+        reloadLists();
+       });
+
+
+       backbutton.addEventListener("click", function(){
+        reloadLists();
+       })
+      
+      
+      })
+
+
+
+
+
     deleteimg.addEventListener("click", async function () {
+
         
         const parentButtonId = event.target.parentNode.id;
         currentListid = (listenid[((parseInt(event.target.id)) )]);
@@ -76,7 +162,7 @@ async function addlists() {
 
   addlst.addEventListener("click", async function(){
 
-    let elements = document.querySelectorAll(".Lstbtn, .addlstbtn, .deleteimg");
+    let elements = document.querySelectorAll(".Lstbtn, .addlstbtn, .deleteimg, .editimg");
     elements.forEach(element => {
       element.parentNode.removeChild(element);
     });
@@ -142,7 +228,7 @@ async function addlists() {
 
 
 async function addTasks() {
-  let elements = document.querySelectorAll(".Lstbtn, .addlstbtn, .deleteimg");
+  let elements = document.querySelectorAll(".Lstbtn, .addlstbtn, .deleteimg, .editimg");
   elements.forEach(element => {
     element.parentNode.removeChild(element);
   });
@@ -323,6 +409,19 @@ async function addTasks() {
 
     });
 
+    backbutton.addEventListener("click", async function(){
+    
+      let elements = document.querySelectorAll(".TskchgSite");
+    elements.forEach(element => {
+      element.parentNode.removeChild(element);
+    })          //Löschen der Vorherigen HTML Elemente
+
+    await getTasks();
+    await addTasks();
+    })
+  
+  
+  
   });
 }
 
@@ -419,11 +518,13 @@ async function chgTasks(event) {
     await getTasks();
     await addTasks();
 
-  });
+  }
+  
+  );
 
 
   backbutton.addEventListener("click", async function () {
-
+    console.log("hey ich drpck doch")
     let elements = document.getElementsByClassName("TskchgSite");
     while (elements.length > 0) {
       elements[0].parentNode.removeChild(elements[0]);          //Löschen der Vorherigen HTML Elemente
@@ -435,7 +536,7 @@ async function chgTasks(event) {
 }
 
 async function reloadLists(){
-  let elements = document.querySelectorAll(".Lstbtn, .addlstbtn, .deleteimg");
+  let elements = document.querySelectorAll(".Lstbtn, .addlstbtn, .deleteimg, .editimg, .TskchgSite");
     elements.forEach(element => {
       element.parentNode.removeChild(element);
     });
