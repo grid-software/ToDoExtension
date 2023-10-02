@@ -17,6 +17,10 @@ async function addlists() {
   await getLists();
   let anzahllisten = globalList.value.length;
   listenid.length = 0; //cleart das arrays
+
+
+
+
   for (let i = 0; i < anzahllisten; i++) {
     const Listenbutton = document.createElement("button");
     
@@ -31,7 +35,20 @@ async function addlists() {
 
       //div für actions
       var actiondiv = document.createElement("div");
-      actiondiv.sytle = "float: right";
+      actiondiv.style = "float: right";
+      actiondiv.classList.add("actiondiv");
+
+      //divs für listenbuttons
+      var lstbtndiv = document.createElement("div");
+      lstbtndiv.style = "display: flex";
+      lstbtndiv.classList.add("lstbtndiv");
+      lstbtndiv.style= "align-items : center";
+      lstbtndiv.style = "width: 80%";
+
+      //div für beiede zusammen
+      var fulllistact = document.createElement("div");
+      fulllistact.style = "display : flex";
+
 
       //delete image
       var deleteimg = document.createElement('img');
@@ -39,8 +56,7 @@ async function addlists() {
       deleteimg.width = 20;
       deleteimg.height = 20;
       deleteimg.alt = "löschen";
-      deleteimg.style = 'float: right';
-      deleteimg.classList.add('invert');
+     // deleteimg.style = 'float: left';
       deleteimg.classList.add('deleteimg');
       deleteimg.setAttribute('id', i);
 
@@ -50,20 +66,27 @@ async function addlists() {
       editimage.src = "edit.png";
       editimage.width = 25;
       editimage.height = 25;
+      editimage.classList.add('invert');
       editimage.alt = "editieren";
-      editimage.style ="float.right";
+     // editimage.style ="float: left";
       editimage.classList.add("editimg");
       editimage.setAttribute("id", i);
       
 
-    actiondiv.appendChild(Listenbutton);
-    actiondiv.appendChild(editimage);
-    actiondiv.appendChild(deleteimg);
-    Listendiv.appendChild(actiondiv);
-    
-    listenid.push(globalList.value[i].id);
-    
-    editimage.addEventListener("click", async function(){
+      Listendiv.sytle = "display: flex"
+
+
+      lstbtndiv.appendChild(Listenbutton);
+      actiondiv.appendChild(editimage);
+      actiondiv.appendChild(deleteimg);
+      fulllistact.appendChild(lstbtndiv);
+      fulllistact.appendChild(actiondiv);
+      Listendiv.appendChild(fulllistact);
+      
+      
+      listenid.push(globalList.value[i].id);
+      
+      editimage.addEventListener("click", async function(){
 
       const parentButtonId = event.target.parentNode.id;
       currentListid = (listenid[((parseInt(event.target.id)) )]);
@@ -160,72 +183,77 @@ async function addlists() {
   addlst.classList.add("addlstbtn");
   Listendiv.appendChild(addlst);
 
-  addlst.addEventListener("click", async function(){
-
+  addlst.addEventListener("click", async function() {
     let elements = document.querySelectorAll(".Lstbtn, .addlstbtn, .deleteimg, .editimg");
     elements.forEach(element => {
       element.parentNode.removeChild(element);
     });
-
+  
     const header = document.createElement("h3");
     const headerbox = document.createElement("p");
     const savebutton = document.createElement("button");
     const backbutton = document.createElement("button");
-
+  
     headerbox.contentEditable = "true";
     header.textContent = "Titel";
     savebutton.textContent = "Speichern";
+  
+    // Create the SVG element
+    const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+    svg.setAttribute("viewBox", "0 0 180 60");
+  
+    // Create the SVG path
+    const path = document.createElementNS("http://www.w3.org/2000/svg", "path");
+    path.setAttribute("d", "M0,0 L180,0 L180,60 L0,60 L0,0 Z");
+  
+    // Append the path to the SVG element
+    svg.appendChild(path);
+  
+    backbutton.appendChild(svg);
     backbutton.textContent = "Zurück";
-
+  
     headerbox.classList.add("header-box");
     savebutton.classList.add("addlstbtn");
     backbutton.classList.add("backbtn");
-
+    backbutton.classList.add("TskchgSite");
+  
     header.classList.add("TskchgSite");
     headerbox.classList.add("TskchgSite");
     savebutton.classList.add("TskchgSite");
-    backbutton.classList.add("TskchgSite");
-
+  
     Listendiv.appendChild(header);
     Listendiv.appendChild(headerbox);
     Listendiv.appendChild(savebutton);
     Listendiv.appendChild(backbutton);
-
-    savebutton.addEventListener("click", async function(){
-
+  
+    savebutton.addEventListener("click", async function() {
       addlstjs = {
-
         displayName: headerbox.textContent 
       };
-
-
+  
       await postLists(addlstjs);
-
+  
       let elements = document.querySelectorAll(".TskchgSite");
-    elements.forEach(element => {
-      element.parentNode.removeChild(element);
+      elements.forEach(element => {
+        element.parentNode.removeChild(element);
+      });
+  
+      await addlists();
     });
-
-
-    await addlists();
-    })
-
-    backbutton.addEventListener("click", async function(){
+  
+    backbutton.addEventListener("click", async function() {
       let elements = document.querySelectorAll(".TskchgSite");
-    elements.forEach(element => {
-      element.parentNode.removeChild(element);
+      elements.forEach(element => {
+        element.parentNode.removeChild(element);
+      });
+      await addlists();
     });
-    await addlists();
-    })
-
-
-  })
-
+  });
+  
   console.log(listenid);
   console.log(listenid[1]);
-}
 
-
+};
 
 async function addTasks() {
   let elements = document.querySelectorAll(".Lstbtn, .addlstbtn, .deleteimg, .editimg");
