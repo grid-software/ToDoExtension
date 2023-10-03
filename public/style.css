@@ -273,3 +273,8 @@ h1{
   .addtskbtn:hover:after{
     width: 100%;
   }
+
+  .fertig {
+    text-decoration: line-through;
+    color: gray
+}

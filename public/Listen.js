@@ -95,7 +95,7 @@ async function addlists() {
       
       
       //Löscht alle elemente aus der Ansicht
-      let elements = document.querySelectorAll(".Lstbtn, .addlstbtn, .deleteimg, .editimg");
+      let elements = document.querySelectorAll(".Lstbtn, .addlstbtn, .deleteimg, .editimg, .inspect");
       elements.forEach(element => {
       element.parentNode.removeChild(element);
       });
@@ -193,7 +193,7 @@ async function addlists() {
   Listendiv.appendChild(addlst);
 
   addlst.addEventListener("click", async function() {
-    let elements = document.querySelectorAll(".Lstbtn, .addlstbtn, .deleteimg, .editimg");
+    let elements = document.querySelectorAll(".Lstbtn, .addlstbtn, .deleteimg, .editimg, .inspect");
     elements.forEach(element => {
       element.parentNode.removeChild(element);
     });
@@ -257,7 +257,7 @@ async function addlists() {
 };
 
 async function addTasks() {
-  let elements = document.querySelectorAll(".Lstbtn, .addlstbtn, .deleteimg, .editimg");
+  let elements = document.querySelectorAll(".Lstbtn, .addlstbtn, .deleteimg, .editimg, .inspect");
   elements.forEach(element => {
     element.parentNode.removeChild(element);
   });
@@ -274,78 +274,80 @@ async function addTasks() {
 
     Listendiv.appendChild(NoTaskbutton);
     NoTaskbutton.addEventListener("click",function(){
-    let elements = document.querySelectorAll(".Tskbtn, .backbtn, .addtskbtn, .deleteimg");
-    elements.forEach(element => {
-      element.parentNode.removeChild(element);
-    });
+          let elements = document.querySelectorAll(".Tskbtn, .backbtn, .addtskbtn, .deleteimg, .inspect");
+          elements.forEach(element => {
+            element.parentNode.removeChild(element);
+          });
 
-    const header = document.createElement("h3");
-    const headerbox = document.createElement("p");
-    const contents = document.createElement("h3");
-    const contentbox = document.createElement("p");
-    const savebutton = document.createElement("button");
-    const backbutton = document.createElement("button");
-    const savespan = document.createElement("span");
-    const backspan = document.createElement("span");
-    headerbox.contentEditable = "true";
-    contentbox.contentEditable = "true";
-
-    header.textContent = "Titel";
-    contents.textContent = "Inhalt";
-
-    savespan.textContent = "Speichern";
-    savebutton.appendChild(savespan);
-    backspan.textContent = "Zurück";
-    backbutton.appendChild(backspan);
+          const header = document.createElement("h3");
+          const headerbox = document.createElement("p");
+          const contents = document.createElement("h3");
+          const contentbox = document.createElement("p");
+          const savebutton = document.createElement("button");
+          const backbutton = document.createElement("button");
+          const savespan = document.createElement("span");
+          const backspan = document.createElement("span");
 
 
-    headerbox.classList.add("header-box");
-    contentbox.classList.add("content-box");
-    savebutton.classList.add("addlstbtn");
-    backbutton.classList.add("backbtn");
+          headerbox.contentEditable = "true";
+          contentbox.contentEditable = "true";
 
-    header.classList.add("TskchgSite");
-    headerbox.classList.add("TskchgSite");
-    contents.classList.add("TskchgSite");
-    contentbox.classList.add("TskchgSite");
-    savebutton.classList.add("TskchgSite");
-    backbutton.classList.add("TskchgSite");
+          header.textContent = "Titel";
+          contents.textContent = "Inhalt";
 
-    Listendiv.appendChild(header);
-    Listendiv.appendChild(headerbox);
-    Listendiv.appendChild(contents);
-    Listendiv.appendChild(contentbox);
-    Listendiv.appendChild(savebutton);
-    Listendiv.appendChild(backbutton);
-
-    savebutton.addEventListener("click", async function() {
-
-      addtaskjs = {
-      
-        body: {
-          content: contentbox.textContent
-          ,
-          contentType: "text"
-        },
-        title: headerbox.textContent
-      };
-
-      await postTasks(addtaskjs);
-
-      let elements = document.getElementsByClassName("TskchgSite");
-    while (elements.length > 0) {
-      elements[0].parentNode.removeChild(elements[0]);          //Löschen der Vorherigen HTML Elemente
-    }
-
-    await getTasks();
-    await addTasks();
+          savespan.textContent = "Speichern";
+          savebutton.appendChild(savespan);
+          backspan.textContent = "Zurück";
+          backbutton.appendChild(backspan);
 
 
-  });});
+          headerbox.classList.add("header-box");
+          contentbox.classList.add("content-box");
+          savebutton.classList.add("addlstbtn");
+          backbutton.classList.add("backbtn");
+
+          header.classList.add("TskchgSite");
+          headerbox.classList.add("TskchgSite");
+          contents.classList.add("TskchgSite");
+          contentbox.classList.add("TskchgSite");
+          savebutton.classList.add("TskchgSite");
+          backbutton.classList.add("TskchgSite");
+
+          Listendiv.appendChild(header);
+          Listendiv.appendChild(headerbox);
+          Listendiv.appendChild(contents);
+          Listendiv.appendChild(contentbox);
+          Listendiv.appendChild(savebutton);
+          Listendiv.appendChild(backbutton);
+
+          savebutton.addEventListener("click", async function() {
+
+            addtaskjs = {
+            
+              body: {
+                content: contentbox.textContent
+                ,
+                contentType: "text"
+              },
+              title: headerbox.textContent
+            };
+
+            await postTasks(addtaskjs);
+
+            let elements = document.getElementsByClassName("TskchgSite");
+          while (elements.length > 0) {
+            elements[0].parentNode.removeChild(elements[0]);          //Löschen der Vorherigen HTML Elemente
+          }
+
+          await getTasks();
+          await addTasks();
+
+
+        });});
   }
 
   taskid.length = (0);                          //reset der Taskid liste
-
+  
   for (let i = 0; i < anzahltasks; i++) {                       //Aufzählung der tasks
     const Taskbutton = document.createElement("button");
 
@@ -355,18 +357,57 @@ async function addTasks() {
     deleteimg.width = 20;
     deleteimg.height = 20;
     deleteimg.alt = "löschen";
-    deleteimg.style = 'float: right';
-    deleteimg.style.marginTop = 30 + "px";
     deleteimg.classList.add('deleteimg');
     deleteimg.setAttribute('id', i);
     //Löschbutton
+
+
+
+    //inspect button
+    var eyebutton = document.createElement("img");
+    eyebutton.src = "eye.png"
+    eyebutton.width = 20;
+    eyebutton.height = 20;
+    eyebutton.style.marginRight = 20+"px";
+    eyebutton.alt = "ansehen";
+    eyebutton.classList.add("inspect");
+    eyebutton.setAttribute('id', i);
+    //inspect button
+
 
     Taskbutton.classList.add("Tskbtn");
     Taskbutton.setAttribute('id', i);
     Taskbutton.textContent = globalTasksList.value[i].title;
 
-    Listendiv.appendChild(Taskbutton);
-    Listendiv.appendChild(deleteimg);
+    //check ob aufgabe erledigt ist oder nicht
+    if (globalTasksList.value[i].status === "completed"){
+      Taskbutton.classList.add("fertig");
+    };
+    //
+
+
+    //divs für alle Elemente
+    const actiondiv = document.createElement("div");
+    const Taskdiv = document.createElement("div");
+    const gesamtdiv = document.createElement("div");
+
+    Taskdiv.style.display = "flex";
+    Taskdiv.style.width = "80%";
+    Taskdiv.style.marginLeft = 56 + "px";
+    Taskdiv.style.paddingRight = 0;
+    gesamtdiv.style.display = "flex";
+    gesamtdiv.style.alignItems = "center";
+    gesamtdiv.style.justifyContent ="flex-start";
+
+
+
+
+    actiondiv.appendChild(eyebutton);
+    actiondiv.appendChild(deleteimg);
+    Taskdiv.appendChild(Taskbutton);
+    gesamtdiv.appendChild(Taskdiv);
+    gesamtdiv.appendChild(actiondiv);
+    Listendiv.appendChild(gesamtdiv);
     taskid.push(i);
 
     deleteimg.addEventListener("click", async function () {
@@ -386,7 +427,7 @@ async function addTasks() {
 
       await deleteTask(currentListid,currentTaskid);
 
-      let elements = document.querySelectorAll(".Tskbtn, .backbtn, .addtskbtn, .deleteimg");
+      let elements = document.querySelectorAll(".Tskbtn, .backbtn, .addtskbtn, .deleteimg, .inspect");
       elements.forEach(element => {
         element.parentNode.removeChild(element);
       })          //Löschen der Vorherigen HTML Elemente
@@ -395,7 +436,7 @@ async function addTasks() {
       await addTasks();
     });
   
-
+    
       
     };
 
@@ -423,9 +464,10 @@ async function addTasks() {
 
 
   const Taskknopf = document.getElementsByClassName("Tskbtn");
+  const Eyes = document.getElementsByClassName("inspect");
 
   for (let i = 0; i < Taskknopf.length; i++) {
-    Taskknopf[i].addEventListener("click", async function (event) {
+    Eyes[i].addEventListener("click", async function (event) {
 
       chgTasks(event);
     });
@@ -436,7 +478,7 @@ async function addTasks() {
 
 
   backbutton.addEventListener("click", async function () {
-    let elements = document.querySelectorAll(".Tskbtn, .backbtn, .addtskbtn, .deleteimg");
+    let elements = document.querySelectorAll(".Tskbtn, .backbtn, .addtskbtn, .deleteimg, .inspect");
     elements.forEach(element => {
       element.parentNode.removeChild(element);
     })          //Löschen der Vorherigen HTML Elemente
@@ -448,7 +490,7 @@ async function addTasks() {
 
 
   addbutton.addEventListener("click", async function () {
-    let elements = document.querySelectorAll(".Tskbtn, .backbtn, .addtskbtn, .deleteimg");
+    let elements = document.querySelectorAll(".Tskbtn, .backbtn, .addtskbtn, .deleteimg, .inspect");
     elements.forEach(element => {
       element.parentNode.removeChild(element);
     });
@@ -540,7 +582,7 @@ async function addTasks() {
 
 
 async function chgTasks(event) {
-  let elements = document.querySelectorAll(".Tskbtn, .backbtn, .addtskbtn, .deleteimg");
+  let elements = document.querySelectorAll(".Tskbtn, .backbtn, .addtskbtn, .deleteimg, .inspect");
   elements.forEach(element => {
     element.parentNode.removeChild(element);
   });
@@ -650,7 +692,7 @@ async function chgTasks(event) {
 }
 
 async function reloadLists(){
-  let elements = document.querySelectorAll(".Lstbtn, .addlstbtn, .deleteimg, .editimg, .TskchgSite");
+  let elements = document.querySelectorAll(".Lstbtn, .addlstbtn, .deleteimg, .editimg, .TskchgSite, .inspect");
     elements.forEach(element => {
       element.parentNode.removeChild(element);
     });
