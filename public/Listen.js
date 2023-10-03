@@ -1,6 +1,6 @@
 
 const Listendiv = document.getElementById("Listendiv");
-
+const h1 = document.getElementsByClassName("h1")[0];
 let globalList;
 let globalTasksList;
 const listenid = [{}];
@@ -17,7 +17,8 @@ async function addlists() {
   await getLists();
   let anzahllisten = globalList.value.length;
   listenid.length = 0; //cleart das arrays
-
+  
+  h1.textContent = "Listen";
 
 
 
@@ -75,6 +76,7 @@ async function addlists() {
 
       Listendiv.sytle = "display: flex"
 
+      lstbtndiv.style.marginLeft = 56 + "px";
 
       lstbtndiv.appendChild(Listenbutton);
       actiondiv.appendChild(editimage);
@@ -104,11 +106,16 @@ async function addlists() {
       const headerbox = document.createElement("p");
       const savebutton = document.createElement("button");
       const backbutton = document.createElement("button");
+      const savespan = document.createElement("span");
+      const backspan = document.createElement("span");
 
       headerbox.contentEditable = "true";
       header.textContent = "Titel";
-      savebutton.textContent = "Speichern";
-      backbutton.textContent = "Zurück";
+      savespan.textContent = "Speichern";
+      backspan.textContent = "Zurück";
+
+      savebutton.appendChild(savespan);
+      backbutton.appendChild(backspan);
 
       headerbox.classList.add("header-box");
       savebutton.classList.add("addlstbtn");
@@ -179,7 +186,9 @@ async function addlists() {
 
   //hinzufügen
   const addlst = document.createElement("button");
-  addlst.textContent = "neue Liste hinzufügen";
+  const addspan = document.createElement("span");
+  addspan.textContent = "neue Liste hinzufügen";
+  addlst.appendChild(addspan);
   addlst.classList.add("addlstbtn");
   Listendiv.appendChild(addlst);
 
@@ -193,24 +202,16 @@ async function addlists() {
     const headerbox = document.createElement("p");
     const savebutton = document.createElement("button");
     const backbutton = document.createElement("button");
+    const savespan = document.createElement("span");
+    const backspan = document.createElement("span");
   
     headerbox.contentEditable = "true";
     header.textContent = "Titel";
-    savebutton.textContent = "Speichern";
-  
-    // Create the SVG element
-    const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
-    svg.setAttribute("viewBox", "0 0 180 60");
-  
-    // Create the SVG path
-    const path = document.createElementNS("http://www.w3.org/2000/svg", "path");
-    path.setAttribute("d", "M0,0 L180,0 L180,60 L0,60 L0,0 Z");
-  
-    // Append the path to the SVG element
-    svg.appendChild(path);
-  
-    backbutton.appendChild(svg);
-    backbutton.textContent = "Zurück";
+    savespan.textContent = "Speichern";
+    backspan.textContent = "Zurück";
+
+    savebutton.appendChild(savespan);
+    backbutton.appendChild(backspan);
   
     headerbox.classList.add("header-box");
     savebutton.classList.add("addlstbtn");
@@ -262,14 +263,85 @@ async function addTasks() {
   });
   let anzahltasks = globalTasksList.value.length;
   console.log(anzahltasks);
+
+  h1.textContent = "Aufgaben";
+
   if (anzahltasks === 0) {                                        //falls keine Aufgaben in der Liste vorhanden sind
-    const Taskbutton = document.createElement("button");
-    Taskbutton.classList.add("Tskbtn");
+    const NoTaskbutton = document.createElement("button");
+    NoTaskbutton.classList.add("Tskbtn");
 
-    Taskbutton.textContent = "keine Aufgaben vorhanden";
+    NoTaskbutton.textContent = "keine Aufgaben vorhanden";
 
-    Listendiv.appendChild(Taskbutton);
+    Listendiv.appendChild(NoTaskbutton);
+    NoTaskbutton.addEventListener("click",function(){
+    let elements = document.querySelectorAll(".Tskbtn, .backbtn, .addtskbtn, .deleteimg");
+    elements.forEach(element => {
+      element.parentNode.removeChild(element);
+    });
 
+    const header = document.createElement("h3");
+    const headerbox = document.createElement("p");
+    const contents = document.createElement("h3");
+    const contentbox = document.createElement("p");
+    const savebutton = document.createElement("button");
+    const backbutton = document.createElement("button");
+    const savespan = document.createElement("span");
+    const backspan = document.createElement("span");
+    headerbox.contentEditable = "true";
+    contentbox.contentEditable = "true";
+
+    header.textContent = "Titel";
+    contents.textContent = "Inhalt";
+
+    savespan.textContent = "Speichern";
+    savebutton.appendChild(savespan);
+    backspan.textContent = "Zurück";
+    backbutton.appendChild(backspan);
+
+
+    headerbox.classList.add("header-box");
+    contentbox.classList.add("content-box");
+    savebutton.classList.add("addlstbtn");
+    backbutton.classList.add("backbtn");
+
+    header.classList.add("TskchgSite");
+    headerbox.classList.add("TskchgSite");
+    contents.classList.add("TskchgSite");
+    contentbox.classList.add("TskchgSite");
+    savebutton.classList.add("TskchgSite");
+    backbutton.classList.add("TskchgSite");
+
+    Listendiv.appendChild(header);
+    Listendiv.appendChild(headerbox);
+    Listendiv.appendChild(contents);
+    Listendiv.appendChild(contentbox);
+    Listendiv.appendChild(savebutton);
+    Listendiv.appendChild(backbutton);
+
+    savebutton.addEventListener("click", async function() {
+
+      addtaskjs = {
+      
+        body: {
+          content: contentbox.textContent
+          ,
+          contentType: "text"
+        },
+        title: headerbox.textContent
+      };
+
+      await postTasks(addtaskjs);
+
+      let elements = document.getElementsByClassName("TskchgSite");
+    while (elements.length > 0) {
+      elements[0].parentNode.removeChild(elements[0]);          //Löschen der Vorherigen HTML Elemente
+    }
+
+    await getTasks();
+    await addTasks();
+
+
+  });});
   }
 
   taskid.length = (0);                          //reset der Taskid liste
@@ -284,7 +356,7 @@ async function addTasks() {
     deleteimg.height = 20;
     deleteimg.alt = "löschen";
     deleteimg.style = 'float: right';
-    deleteimg.classList.add('invert');
+    deleteimg.style.marginTop = 30 + "px";
     deleteimg.classList.add('deleteimg');
     deleteimg.setAttribute('id', i);
     //Löschbutton
@@ -334,14 +406,18 @@ async function addTasks() {
 
   // hinzufügen button
   const addbutton = document.createElement("button");
-  addbutton.textContent = "neue Aufgabe hinzufügen";
+  const addspan = document.createElement("span");
+  addspan.textContent = "neue Aufgabe hinzufügen";
   addbutton.classList.add("addtskbtn");
+  addbutton.appendChild(addspan);
   Listendiv.appendChild(addbutton);
 
   //zurück button
   const backbutton = document.createElement("button");
-  backbutton.textContent = "Zurück";
+  const backspan = document.createElement("span");
+  backspan.textContent = "Zurück";
   backbutton.classList.add("backbtn")
+  backbutton.appendChild(backspan);
   Listendiv.appendChild(backbutton);
 
 
@@ -354,6 +430,9 @@ async function addTasks() {
       chgTasks(event);
     });
   }
+
+
+ 
 
 
   backbutton.addEventListener("click", async function () {
@@ -380,6 +459,8 @@ async function addTasks() {
     const contentbox = document.createElement("p");
     const savebutton = document.createElement("button");
     const backbutton = document.createElement("button");
+    const savespan = document.createElement("span");
+    const backspan = document.createElement("span");
 
     headerbox.contentEditable = "true";
     contentbox.contentEditable = "true";
@@ -387,10 +468,10 @@ async function addTasks() {
     header.textContent = "Titel";
     contents.textContent = "Inhalt";
 
-    savebutton.textContent = "Speichern";
-
-    backbutton.textContent = "Zurück";
-
+    savespan.textContent = "Speichern";
+    savebutton.appendChild(savespan);
+    backspan.textContent = "Zurück";
+    backbutton.appendChild(backspan);
 
     headerbox.classList.add("header-box");
     contentbox.classList.add("content-box");
@@ -470,6 +551,8 @@ async function chgTasks(event) {
   const contentbox = document.createElement("p");
   const savebutton = document.createElement("button");
   const backbutton = document.createElement("button");
+  const savespan = document.createElement("span");
+  const backspan = document.createElement("span");
 
   headerbox.contentEditable = "true";
   contentbox.contentEditable = "true";
@@ -477,7 +560,10 @@ async function chgTasks(event) {
   header.textContent = "Titel";
   contents.textContent = "Inhalt";
 
-  savebutton.textContent = "Speichern";
+  savespan.textContent = "Speichern";
+  savebutton.appendChild(savespan);
+  backspan.textContent = "Zurück";
+  backbutton.appendChild(backspan);
 
   //Inhalt der Tasks
 
@@ -498,7 +584,7 @@ async function chgTasks(event) {
   headerbox.textContent = globalTasksList.value[(taskid[((parseInt(event.target.id)) )])].title;
   contentbox.textContent = globalTasksList.value[(taskid[((parseInt(event.target.id)) )])].body.content;
 
-  backbutton.textContent = "Zurück";
+  
 
 
   headerbox.classList.add("header-box");

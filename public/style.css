@@ -39,8 +39,8 @@ flex-direction: column;
 .Tskbtn{
     
     align-items: center;
-    background: linear-gradient(#4a72b3b6, #263b5eb6);
-    color: #11162F;
+    background: linear-gradient(#11162F, #11162F);
+    color: white;
     font-size: 16px;
     outline: 50px;
     border: 1px solid ;
@@ -68,9 +68,10 @@ flex-direction: column;
 }
 
 .Tskbtn:hover{
-    background: linear-gradient(#1e3150b6, #0e1c33b6);
+    background: linear-gradient(white, white);
     cursor: pointer;
-    border-color:white;
+    color: #11162F;
+    border-color:#11162F;;
 }
 
 .Lstbtn:hover{
@@ -84,39 +85,41 @@ flex-direction: column;
 .addlstbtn{
     
     align-items: center;
-    background: linear-gradient(#11162F, #11162F);
-    color: white;
-    border: 1px solid;
-    border-color:#11162F;
+    background: linear-gradient(#FBD200, #FBD200);
+    color: #11162F;
     font-size: 16px;
     outline: 0;
-    
+    border: 1px solid;
+    border-color: #11162F;
     padding:15px 25px;
-    margin: 30px 0 20px;
+    margin: 30px 5px 20px;
+    position: relative;
+    transition: all .35s;
 }
 
 .addlstbtn:hover{
-    background: linear-gradient(#FBD200, #FBD200); 
-    color: #11162F;
+    color: white;
     cursor: pointer;
-    border-color:#11162F;
+   
 }
 
 .addtskbtn{
     
     align-items: center;
-    background: linear-gradient(#5684ce, #4a72b3);
+    background: linear-gradient(#FBD200, #FBD200);
     color: #11162F;
     font-size: 16px;
     outline: 0;
-    border: 0;
-    border-radius: 20px;
+    border: 1px solid;
+    border-color: #11162F;
     padding:15px 25px;
-    margin: 30px 0 20px;
+    margin: 30px 5px 20px;
+    position: relative;
+    transition: all .35s;
 }
 
 .addtskbtn:hover{
-    background: linear-gradient(#334e7a, #21324e); 
+    color: white;
     cursor: pointer;
 }
 
@@ -128,35 +131,18 @@ flex-direction: column;
     color: #11162F;
     font-size: 16px;
     outline: 0;
-    border: 20px solid;
+    border: 1px solid;
     border-color: #11162F;
     padding:15px 25px;
-    margin: 30px 0 20px;
+    margin: 30px 5px 20px;
+    position: relative;
+    transition: all .35s;
 }
 
-
-.backbtn svg {
-    position: absolute;
-    left: 0;
-    top: 0;
-    fill: none;
-    stroke: #fff;
-    stroke-dasharray: 150 480;
-    stroke-dashoffset: 150;
-    transition: 1s ease-in-out;
+.backbtn:hover{
+    color: white;
+    cursor: pointer;
   }
-  
-  .backbtn:hover {
-    transition: 1s ease-in-out;
-    background: #11162F;
-    color: white; /* Add this line to change the text color on hover */
-    border-color: green; /* Add this line to change the border color on hover */
-  }
-  
-  .backbtn:hover svg {
-    stroke-dashoffset: -480;
-  }
-  
 
 
 .header-box{
@@ -169,7 +155,8 @@ flex-direction: column;
     padding: 20px;
     margin: auto;
     outline: none;
-    border-radius: 5px;
+    border: 1px solid;
+    border-color: #11162F;
      
 }
 
@@ -183,7 +170,8 @@ flex-direction: column;
     padding: 20px;
     margin: auto;
     outline: none;
-    border-radius: 5px;
+    border: 1px solid;
+    border-color: #11162F;
      
 }
 
@@ -212,4 +200,76 @@ h1{
   .actiondiv{
     display: flex;
     align-items: center;
+  }
+
+
+  .backbtn span{
+    position: relative;
+    z-index: 2;
+  }
+
+
+ 
+  
+  .backbtn:after{
+    position: absolute;
+    content: "";
+    top: 0;
+    left: 0;
+    width: 0;
+    height: 100%;
+    background: #11162F;
+    transition: all .35s;
+  }
+  
+  
+  
+  .backbtn:hover:after{
+    width: 100%;
+  }
+
+
+  .addlstbtn span{
+    position: relative;
+    z-index: 2;
+  }
+   
+  .addlstbtn:after{
+    position: absolute;
+    content: "";
+    top: 0;
+    left: 0;
+    width: 0;
+    height: 100%;
+    background: #11162F;
+    transition: all .35s;
+  }
+  
+  
+  
+  .addlstbtn:hover:after{
+    width: 100%;
+  }
+
+
+  .addtskbtn span{
+    position: relative;
+    z-index: 2;
+  }
+   
+  .addtskbtn:after{
+    position: absolute;
+    content: "";
+    top: 0;
+    left: 0;
+    width: 0;
+    height: 100%;
+    background: #11162F;
+    transition: all .35s;
+  }
+  
+  
+  
+  .addtskbtn:hover:after{
+    width: 100%;
   }
