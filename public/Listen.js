@@ -1,6 +1,7 @@
 
 const Listendiv = document.getElementById("Listendiv");
 const h1 = document.getElementsByClassName("h1")[0];
+const sigbtn = document.getElementsByClassName("sigbtn")[0];
 let globalList;
 let globalTasksList;
 const listenid = [{}];
@@ -11,9 +12,16 @@ let updateTasksjs = [{}];
 let addtaskjs = [{}];
 let addlstjs = [{}];
 let updatelistjs = [{}];
+let uncheckTasksjs = [{}];
+let checkTasksjs = [{}];
 
 
 async function addlists() {
+  let elements = document.querySelectorAll(".sigbtn");
+      elements.forEach(element => {
+      element.parentNode.removeChild(element);
+      });
+
   await getLists();
   let anzahllisten = globalList.value.length;
   listenid.length = 0; //cleart das arrays
@@ -471,6 +479,10 @@ async function addTasks() {
 
       chgTasks(event);
     });
+
+    Taskknopf[i].addEventListener("click", async function(event){
+      await checkTask(event);
+    })
   }
 
 
@@ -698,6 +710,46 @@ async function reloadLists(){
     });
     await addlists();
 
+
+}
+
+async function checkTask(event){
+  const checktaskid = (globalTasksList.value[(taskid[((parseInt(event.target.id)) )])].id);
+  if(globalTasksList.value[(taskid[((parseInt(event.target.id)) )])].status === "notStarted"){
+
+    checkTasksjs = {
+      status : "completed"
+    };
+    await updateTasks(checkTasksjs, checktaskid);
+
+    let elements = document.querySelectorAll(".Tskbtn, .backbtn, .addtskbtn, .deleteimg, .inspect");
+  elements.forEach(element => {
+    element.parentNode.removeChild(element);
+  });
+    
+    await getTasks();
+    await addTasks();
+    return;
+
+  };
+  if (globalTasksList.value[(taskid[((parseInt(event.target.id)) )])].status === "completed"){
+    console.log(globalTasksList.value[(taskid[((parseInt(event.target.id)) )])]);
+    uncheckTasksjs = {
+      status : "notStarted"
+    };
+    await updateTasks( uncheckTasksjs, checktaskid);
+
+    let elements = document.querySelectorAll(".Tskbtn, .backbtn, .addtskbtn, .deleteimg, .inspect");
+  elements.forEach(element => {
+    element.parentNode.removeChild(element);
+  });
+    
+    await getTasks();
+    await addTasks();
+    return;
+  };
+  
+  
 
 }
 
