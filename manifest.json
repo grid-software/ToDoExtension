@@ -6,16 +6,13 @@
   
     
     "action": {
-        "default_popup": "localhost:3000/",
+        "default_popup": "localhost:3000",
         "default_title": "To-Do" 
 
     },
     
     "description": "Sehr sehr nices produkt",
-    "icons": {
-        "48": "img/icon.png"
-
-    },
+    
 
     "permissions": [
         "identity"
