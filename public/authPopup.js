@@ -17,26 +17,45 @@ function signIn() {
 }
 
 
-// Rufe die Redirect-URL für die Authentifizierung ab
-var redirectUrl = browser.identity.getRedirectURL();
+function signInWithWebAuthFlow() {
+  var redirectUrl = chrome.identity.getRedirectURL();
 
-// Starte die Web-Authentifizierung
-browser.identity.launchWebAuthFlow(
-  {
-    interactive: true,
-    url: 'https://login.microsoftonline.com/common/oauth2/v2.0/authorize?' +
-      'response_type=token' +
-      '&response_mode=fragment' +
-      `&client_id=Azure AD Application Client ID` +
-      `&redirect_uri=http://localhost:3000` +
-      '&scope=openid https://management.azure.com/user_impersonation profile'
-  }
-).then(function (responseUrl) {
-  // Der Zugriffstoken muss aus der Antwort extrahiert werden.
-  console.log(responseUrl);
-}).catch(function (error) {
-  console.error(error);
-});
+  var authUrl = 'https://login.microsoftonline.com/common/oauth2/v2.0/authorize?' +
+      'response_type=id_token' +
+      '&client_id=0d5bffb8-1943-420d-84b9-63686cd4434a' +
+      '&redirect_uri=' + encodeURIComponent(redirectUrl) +
+      '&scope=openid profile email';
+
+  chrome.identity.launchWebAuthFlow(
+      {
+          url: authUrl,
+          interactive: true
+      },
+      function (responseUrl) {
+          if (chrome.runtime.lastError) {
+              // Fehler beim Starten des Web-Auth-Flows
+              console.error(chrome.runtime.lastError);
+              return;
+          }
+
+          // Überprüfe, ob die Antwort-URL korrekt ist
+          if (responseUrl && responseUrl.startsWith(redirectUrl)) {
+              var params = new URLSearchParams(responseUrl.split("#")[1]);
+              var idToken = params.get("id_token");
+
+              if (idToken) {
+                  console.log("ID-Token erhalten: " + idToken);
+                  // Verarbeite das ID-Token hier
+              } else {
+                  console.log("ID-Token nicht erhalten");
+              }
+          } else {
+              console.error("Ungültige Antwort-URL: " + responseUrl);
+          }
+      }
+  );
+}
+
 
 
 

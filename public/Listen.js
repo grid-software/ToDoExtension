@@ -15,6 +15,11 @@ let updatelistjs = [{}];
 let uncheckTasksjs = [{}];
 let checkTasksjs = [{}];
 
+sigbtn.addEventListener("click", function(){
+  signInWithWebAuthFlow();
+});
+
+
 
 async function addlists() {
   let elements = document.querySelectorAll(".sigbtn");

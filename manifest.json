@@ -1,28 +1,24 @@
 {
-    
-    "manifest_version": 3,
-    "name": "To-Do Browserextension",
-    "version": "1.0.0",
+  "manifest_version": 3,
+  "name": "To-Do Browserextension",
+  "version": "1.0.0",
   
-    
-    "action": {
-        "default_popup": "localhost:3000",
-        "default_title": "To-Do" 
-
-    },
-    
-    "description": "Sehr sehr nices produkt",
-    
-    "background": {
-        "scripts": ["public/background.js"],
-        "persistent": false
-      },
-
-    "permissions": [
-        "identity",
-        "activeTab",
-        "storage"
-    ]
+  "action": {
+      "default_popup": "index.html",
+      "default_title": "To-Do"
+  },
+  "description": "Sehr sehr nices Produkt",
   
-   
+  "permissions": [
+      "identity",
+      "activeTab",
+      "storage",
+      "webNavigation"
+      
+
+  ],
+
+  "content_security_policy": {
+    "extension_pages": "script-src 'self'; object-src 'self'"
   }
+}
