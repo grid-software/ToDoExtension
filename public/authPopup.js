@@ -16,6 +16,30 @@ function signIn() {
     });
 }
 
+
+// Rufe die Redirect-URL für die Authentifizierung ab
+var redirectUrl = browser.identity.getRedirectURL();
+
+// Starte die Web-Authentifizierung
+browser.identity.launchWebAuthFlow(
+  {
+    interactive: true,
+    url: 'https://login.microsoftonline.com/common/oauth2/v2.0/authorize?' +
+      'response_type=token' +
+      '&response_mode=fragment' +
+      `&client_id=Azure AD Application Client ID` +
+      `&redirect_uri=http://localhost:3000` +
+      '&scope=openid https://management.azure.com/user_impersonation profile'
+  }
+).then(function (responseUrl) {
+  // Der Zugriffstoken muss aus der Antwort extrahiert werden.
+  console.log(responseUrl);
+}).catch(function (error) {
+  console.error(error);
+});
+
+
+
 function signOut() {
   myMSALObj.logout();
 }
