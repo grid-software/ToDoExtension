@@ -17,6 +17,10 @@
       
 
   ],
+  "icons": {
+  "128": "icons1282.png"
+    }
+  ,
 
   "content_security_policy": {
     "extension_pages": "script-src 'self'; object-src 'self'"

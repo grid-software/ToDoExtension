@@ -57,7 +57,7 @@ async function addlists() {
       lstbtndiv.style = "display: flex";
       lstbtndiv.classList.add("lstbtndiv");
       lstbtndiv.style= "align-items : center";
-      lstbtndiv.style = "width: 80%";
+      lstbtndiv.style = "width: 75%";
 
       //div für beiede zusammen
       var fulllistact = document.createElement("div");
@@ -72,6 +72,7 @@ async function addlists() {
       deleteimg.alt = "löschen";
      // deleteimg.style = 'float: left';
       deleteimg.classList.add('deleteimg');
+      deleteimg.classList.add("emoticon");
       deleteimg.setAttribute('id', i);
 
 
@@ -80,16 +81,16 @@ async function addlists() {
       editimage.src = "public/edit.png";
       editimage.width = 25;
       editimage.height = 25;
-      editimage.classList.add('invert');
       editimage.alt = "editieren";
      // editimage.style ="float: left";
       editimage.classList.add("editimg");
+      editimage.classList.add("emoticon");
       editimage.setAttribute("id", i);
       
 
       Listendiv.sytle = "display: flex"
 
-      lstbtndiv.style.marginLeft = 56 + "px";
+      //lstbtndiv.style.marginLeft = 56 + "px";
 
       lstbtndiv.appendChild(Listenbutton);
       actiondiv.appendChild(editimage);
@@ -371,6 +372,7 @@ async function addTasks() {
     deleteimg.height = 20;
     deleteimg.alt = "löschen";
     deleteimg.classList.add('deleteimg');
+    deleteimg.classList.add("emoticon");
     deleteimg.setAttribute('id', i);
     //Löschbutton
 
@@ -384,6 +386,7 @@ async function addTasks() {
     eyebutton.style.marginRight = 20+"px";
     eyebutton.alt = "ansehen";
     eyebutton.classList.add("inspect");
+    eyebutton.classList.add("emoticon");
     eyebutton.setAttribute('id', i);
     //inspect button
 
@@ -406,7 +409,6 @@ async function addTasks() {
 
     Taskdiv.style.display = "flex";
     Taskdiv.style.width = "80%";
-    Taskdiv.style.marginLeft = 56 + "px";
     Taskdiv.style.paddingRight = 0;
     gesamtdiv.style.display = "flex";
     gesamtdiv.style.alignItems = "center";
@@ -461,7 +463,7 @@ async function addTasks() {
   // hinzufügen button
   const addbutton = document.createElement("button");
   const addspan = document.createElement("span");
-  addspan.textContent = "neue Aufgabe hinzufügen";
+  addspan.textContent = "hinzufügen";
   addbutton.classList.add("addtskbtn");
   addbutton.appendChild(addspan);
   Listendiv.appendChild(addbutton);
