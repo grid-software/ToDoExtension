@@ -1,6 +1,7 @@
 // Create the main myMSALObj instance
 // configuration parameters are located at authConfig.js
 const myMSALObj = new Msal.UserAgentApplication(msalConfig);
+let gotToken;
 
 function signIn() {
   myMSALObj.loginPopup(loginRequest)
@@ -21,10 +22,11 @@ function signInWithWebAuthFlow() {
   var redirectUrl = chrome.identity.getRedirectURL();
 
   var authUrl = 'https://login.microsoftonline.com/common/oauth2/v2.0/authorize?' +
-      'response_type=id_token' +
+      'response_type=token' +
       '&client_id=0d5bffb8-1943-420d-84b9-63686cd4434a' +
       '&redirect_uri=' + encodeURIComponent(redirectUrl) +
-      '&scope=openid profile email';
+      '&scope=openid profile email Tasks.Read Tasks.ReadWrite' +
+      '&nonce=' + encodeURIComponent(Math.random().toString(36).substring(2, 15));
 
   chrome.identity.launchWebAuthFlow(
       {
@@ -41,16 +43,18 @@ function signInWithWebAuthFlow() {
           // Überprüfe, ob die Antwort-URL korrekt ist
           if (responseUrl && responseUrl.startsWith(redirectUrl)) {
               var params = new URLSearchParams(responseUrl.split("#")[1]);
-              var idToken = params.get("id_token");
+              var accessToken = params.get("access_token"); // Hier hinzugefügt
 
-              if (idToken) {
-                  console.log("ID-Token erhalten: " + idToken);
-                  // Verarbeite das ID-Token hier
+              if (accessToken) {
+                  console.log("Access token received: " + accessToken);
+                  gotToken = accessToken;
+                  addlists();
               } else {
-                  console.log("ID-Token nicht erhalten");
+                  console.log("Access token not received");
+                  console.log(responseUrl);
               }
           } else {
-              console.error("Ungültige Antwort-URL: " + responseUrl);
+              console.error("Invalid response URL: " + responseUrl);
           }
       }
   );
@@ -79,33 +83,12 @@ function getTokenPopup(request) {
     });
 }
 
-function seeProfile() {
-  if (myMSALObj.getAccount()) {
-    getTokenPopup(loginRequest)
-      .then(response => {
-        callMSGraph(graphConfig.graphMeEndpoint, response.accessToken, updateUI);
-      }).catch(error => {
-        console.log(error);
-      });
-  }
-}
-
-function readMail() {
-  if (myMSALObj.getAccount()) {
-    getTokenPopup(tokenRequest)
-      .then(response => {
-        callMSGraph(graphConfig.graphMailEndpoint, response.accessToken, updateUI);
-      }).catch(error => {
-        console.log(error);
-      });
-  }
-}
 
 async function getLists() {
-  if (myMSALObj.getAccount()) {
+  if (signInWithWebAuthFlow) {
     try {
       const response = await getTokenPopup(tokenRequest);
-      await callMSGraph(graphConfig.graphListEndpoint, response.accessToken, updateUI);
+      await callMSGraph(graphConfig.graphListEndpoint, gotToken, updateUI);
     } catch (error) {
       console.log(error);
     }
@@ -113,11 +96,11 @@ async function getLists() {
 }
 
 async function getTasks() {
-  if (myMSALObj.getAccount()) {
+  if (signInWithWebAuthFlow) {
     try {
       const response = await getTokenPopup(tokenRequest);
       graphConfig.graphTasksEndpoint = "https://graph.microsoft.com/v1.0/me/todo/lists/"+currentListid+"/tasks";
-      await callMSGraphTasks(graphConfig.graphTasksEndpoint, response.accessToken, updateUI);
+      await callMSGraphTasks(graphConfig.graphTasksEndpoint, gotToken, updateUI);
     } catch (error) {
       console.log(error);
     }
@@ -126,12 +109,12 @@ async function getTasks() {
 
 
 async function updateTasks(updatetaskjs, currentTaskid) {
-  if (myMSALObj.getAccount()) {
+  if (signInWithWebAuthFlow) {
     try {
       const response = await getTokenPopup(tokenRequest);
       graphConfig.graphTasksUpdateEndpoint = "https://graph.microsoft.com/v1.0/me/todo/lists/"+currentListid+"/tasks/"+currentTaskid+"/";
       console.log(graphConfig.graphTaskUpdateEndpoint);
-      await callMSGraphPatch(graphConfig.graphTasksUpdateEndpoint, response.accessToken, updatetaskjs, updateUI);
+      await callMSGraphPatch(graphConfig.graphTasksUpdateEndpoint, gotToken, updatetaskjs, updateUI);
     } catch (error) {
       console.log(error);
     }
@@ -139,12 +122,12 @@ async function updateTasks(updatetaskjs, currentTaskid) {
 }
 
 async function postTasks(addtaskjs) {
-  if (myMSALObj.getAccount()) {
+  if (signInWithWebAuthFlow) {
     try {
       const response = await getTokenPopup(tokenRequest);
       graphConfig.graphTasksUpdateEndpoint = "https://graph.microsoft.com/v1.0/me/todo/lists/"+currentListid+"/tasks";
       console.log(graphConfig.graphTaskUpdateEndpoint);
-      await callMSGraphPost(graphConfig.graphTasksUpdateEndpoint, response.accessToken, addtaskjs, updateUI);
+      await callMSGraphPost(graphConfig.graphTasksUpdateEndpoint, gotToken, addtaskjs, updateUI);
     } catch (error) {
       console.log(error);
     }
@@ -152,12 +135,12 @@ async function postTasks(addtaskjs) {
 }
 
 async function postLists(addlstjs) {
-  if (myMSALObj.getAccount()) {
+  if (signInWithWebAuthFlow) {
     try {
       const response = await getTokenPopup(tokenRequest);
       graphConfig.graphListsUpdateEndpoint = "https://graph.microsoft.com/v1.0/me/todo/lists";
       console.log(graphConfig.graphListsUpdateEndpoint);
-      await callMSGraphPost(graphConfig.graphListsUpdateEndpoint, response.accessToken, addlstjs, updateUI);
+      await callMSGraphPost(graphConfig.graphListsUpdateEndpoint, gotToken, addlstjs, updateUI);
     } catch (error) {
       console.log(error);
     }
@@ -166,12 +149,12 @@ async function postLists(addlstjs) {
 
 
 async function deleteLists(currentListid) {
-  if (myMSALObj.getAccount()) {
+  if (signInWithWebAuthFlow) {
     try {
       const response = await getTokenPopup(tokenRequest);
       graphConfig.graphListsDeleteEndpoint = "https://graph.microsoft.com/v1.0/me/todo/lists/"+ currentListid;
       console.log(graphConfig.graphListsDeleteEndpoint);
-      await callMSGraphDelete(graphConfig.graphListsDeleteEndpoint, response.accessToken, updateUI);
+      await callMSGraphDelete(graphConfig.graphListsDeleteEndpoint, gotToken, updateUI);
     } catch (error) {
       console.log(error);
     }
@@ -179,12 +162,12 @@ async function deleteLists(currentListid) {
 }
 
 async function deleteTask(currentListid,currentTaskid) {
-  if (myMSALObj.getAccount()) {
+  if (signInWithWebAuthFlow) {
     try {
       const response = await getTokenPopup(tokenRequest);
       graphConfig.graphTasksDeleteEndpoint = "https://graph.microsoft.com/v1.0/me/todo/lists/"+ currentListid +'/tasks/'+ currentTaskid ;
       console.log(graphConfig.graphTasksDeleteEndpoint);
-      await callMSGraphDelete(graphConfig.graphTasksDeleteEndpoint, response.accessToken, updateUI);
+      await callMSGraphDelete(graphConfig.graphTasksDeleteEndpoint, gotToken, updateUI);
     } catch (error) {
       console.log(error);
     }
@@ -193,12 +176,12 @@ async function deleteTask(currentListid,currentTaskid) {
 
 
 async function editLists(currentListid,updatelistjs) {
-  if (myMSALObj.getAccount()) {
+  if (signInWithWebAuthFlow) {
     try {
       const response = await getTokenPopup(tokenRequest);
       graphConfig.graphTasksPatchEndpoint = "https://graph.microsoft.com/v1.0/me/todo/lists/"+ currentListid ;
       console.log(graphConfig.graphTasksPatchEndpoint);
-      await callMSGraphPatch(graphConfig.graphTasksPatchEndpoint, response.accessToken,updatelistjs, updateUI);
+      await callMSGraphPatch(graphConfig.graphTasksPatchEndpoint, gotToken,updatelistjs, updateUI);
     } catch (error) {
       console.log(error);
     }

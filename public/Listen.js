@@ -66,7 +66,7 @@ async function addlists() {
 
       //delete image
       var deleteimg = document.createElement('img');
-      deleteimg.src = "delete.png";
+      deleteimg.src = "public/delete.png";
       deleteimg.width = 20;
       deleteimg.height = 20;
       deleteimg.alt = "löschen";
@@ -77,7 +77,7 @@ async function addlists() {
 
       //edit image
       var editimage = document.createElement("img");
-      editimage.src = "edit.png";
+      editimage.src = "public/edit.png";
       editimage.width = 25;
       editimage.height = 25;
       editimage.classList.add('invert');
@@ -366,7 +366,7 @@ async function addTasks() {
 
     //Löschbutton
     var deleteimg = document.createElement('img');
-    deleteimg.src = "delete.png";
+    deleteimg.src = "public/delete.png";
     deleteimg.width = 20;
     deleteimg.height = 20;
     deleteimg.alt = "löschen";
@@ -378,7 +378,7 @@ async function addTasks() {
 
     //inspect button
     var eyebutton = document.createElement("img");
-    eyebutton.src = "eye.png"
+    eyebutton.src = "public/eye.png"
     eyebutton.width = 20;
     eyebutton.height = 20;
     eyebutton.style.marginRight = 20+"px";
