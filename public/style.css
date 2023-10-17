@@ -213,6 +213,14 @@ h1{
     margin-bottom: 10px;
     border: #11162F 1px solid;
   }
+  .actionlistdiv{
+    display: flex;
+    align-items: center;
+    background-color: #11162F;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    border: #11162F 1px solid;
+  }
 
 
   .backbtn span{

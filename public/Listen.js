@@ -109,7 +109,7 @@ async function addlists() {
       
       
       //Löscht alle elemente aus der Ansicht
-      let elements = document.querySelectorAll(".Lstbtn, .addlstbtn, .deleteimg, .editimg, .inspect");
+      let elements = document.querySelectorAll(".Lstbtn, .addlstbtn, .deleteimg, .editimg, .inspect, .lstbtndiv, .actiondiv");
       elements.forEach(element => {
       element.parentNode.removeChild(element);
       });
@@ -207,7 +207,7 @@ async function addlists() {
   Listendiv.appendChild(addlst);
 
   addlst.addEventListener("click", async function() {
-    let elements = document.querySelectorAll(".Lstbtn, .addlstbtn, .deleteimg, .editimg, .inspect");
+    let elements = document.querySelectorAll(".Lstbtn, .addlstbtn, .deleteimg, .editimg, .inspect, .lstbtndiv, .actiondiv");
     elements.forEach(element => {
       element.parentNode.removeChild(element);
     });
@@ -271,7 +271,7 @@ async function addlists() {
 };
 
 async function addTasks() {
-  let elements = document.querySelectorAll(".Lstbtn, .addlstbtn, .deleteimg, .editimg, .inspect");
+  let elements = document.querySelectorAll(".Lstbtn, .addlstbtn, .deleteimg, .editimg, .inspect, .lstbtndiv, .actiondiv");
   elements.forEach(element => {
     element.parentNode.removeChild(element);
   });
@@ -288,7 +288,7 @@ async function addTasks() {
 
     Listendiv.appendChild(NoTaskbutton);
     NoTaskbutton.addEventListener("click",function(){
-          let elements = document.querySelectorAll(".Tskbtn, .backbtn, .addtskbtn, .deleteimg, .inspect");
+          let elements = document.querySelectorAll(".Tskbtn, .backbtn, .addtskbtn, .deleteimg, .inspect, .lstbtndiv, .actiondiv");
           elements.forEach(element => {
             element.parentNode.removeChild(element);
           });
@@ -365,6 +365,8 @@ async function addTasks() {
   for (let i = 0; i < anzahltasks; i++) {                       //Aufzählung der tasks
     const Taskbutton = document.createElement("button");
 
+
+
     //Löschbutton
     var deleteimg = document.createElement('img');
     deleteimg.src = "public/delete.png";
@@ -373,6 +375,7 @@ async function addTasks() {
     deleteimg.alt = "löschen";
     deleteimg.classList.add('deleteimg');
     deleteimg.classList.add("emoticon");
+    deleteimg.classList.add("invert");
     deleteimg.setAttribute('id', i);
     //Löschbutton
 
@@ -383,10 +386,11 @@ async function addTasks() {
     eyebutton.src = "public/eye.png"
     eyebutton.width = 20;
     eyebutton.height = 20;
-    eyebutton.style.marginRight = 20+"px";
+    eyebutton.style.marginLeft = 10+"px";
     eyebutton.alt = "ansehen";
     eyebutton.classList.add("inspect");
     eyebutton.classList.add("emoticon");
+    eyebutton.classList.add("invert");
     eyebutton.setAttribute('id', i);
     //inspect button
 
@@ -405,14 +409,19 @@ async function addTasks() {
     //divs für alle Elemente
     const actiondiv = document.createElement("div");
     const Taskdiv = document.createElement("div");
-    const gesamtdiv = document.createElement("div");
+    var gesamtdiv = document.createElement("div");
 
     Taskdiv.style.display = "flex";
-    Taskdiv.style.width = "80%";
+    Taskdiv.style.width = "75%";
     Taskdiv.style.paddingRight = 0;
-    gesamtdiv.style.display = "flex";
-    gesamtdiv.style.alignItems = "center";
-    gesamtdiv.style.justifyContent ="flex-start";
+    gesamtdiv.style = "display: flex";
+    //gesamtdiv.style.alignItems = "center";
+    //gesamtdiv.style.justifyContent ="flex-start";
+    actiondiv.classList.add("actiondiv");
+    actiondiv.classList.add("actionlistdiv");
+    actiondiv.style = "float: right";
+    
+    
 
 
 
@@ -442,7 +451,7 @@ async function addTasks() {
 
       await deleteTask(currentListid,currentTaskid);
 
-      let elements = document.querySelectorAll(".Tskbtn, .backbtn, .addtskbtn, .deleteimg, .inspect");
+      let elements = document.querySelectorAll(".Tskbtn, .backbtn, .addtskbtn, .deleteimg, .inspect, .lstbtndiv, .actiondiv");
       elements.forEach(element => {
         element.parentNode.removeChild(element);
       })          //Löschen der Vorherigen HTML Elemente
@@ -497,7 +506,7 @@ async function addTasks() {
 
 
   backbutton.addEventListener("click", async function () {
-    let elements = document.querySelectorAll(".Tskbtn, .backbtn, .addtskbtn, .deleteimg, .inspect");
+    let elements = document.querySelectorAll(".Tskbtn, .backbtn, .addtskbtn, .deleteimg, .inspect, .lstbtndiv, .actiondiv");
     elements.forEach(element => {
       element.parentNode.removeChild(element);
     })          //Löschen der Vorherigen HTML Elemente
@@ -509,7 +518,7 @@ async function addTasks() {
 
 
   addbutton.addEventListener("click", async function () {
-    let elements = document.querySelectorAll(".Tskbtn, .backbtn, .addtskbtn, .deleteimg, .inspect");
+    let elements = document.querySelectorAll(".Tskbtn, .backbtn, .addtskbtn, .deleteimg, .inspect, .lstbtndiv, .actiondiv");
     elements.forEach(element => {
       element.parentNode.removeChild(element);
     });
@@ -522,6 +531,7 @@ async function addTasks() {
     const backbutton = document.createElement("button");
     const savespan = document.createElement("span");
     const backspan = document.createElement("span");
+    let currentUrl = window.location.href;
 
     headerbox.contentEditable = "true";
     contentbox.contentEditable = "true";
@@ -543,6 +553,27 @@ async function addTasks() {
     headerbox.classList.add("TskchgSite");
     contents.classList.add("TskchgSite");
     contentbox.classList.add("TskchgSite");
+
+    chrome.tabs.query({active: true, lastFocusedWindow: true}, function(tabs) {
+      var url = tabs[0].url;
+    
+      // Create a new span element
+      var span = document.createElement("span");
+    
+      // Set the text content and font size of the span
+      span.textContent = url;
+      span.style.fontSize = "11px"; // You can adjust the value as needed
+      
+      var br1 = document.createElement("br");
+      var br2 = document.createElement("br");
+    
+      // Append the line breaks and the span to the contentbox
+      contentbox.appendChild(br1);
+      contentbox.appendChild(br2);
+      // Append the span to the contentbox
+      contentbox.appendChild(span);
+    });
+    
     savebutton.classList.add("TskchgSite");
     backbutton.classList.add("TskchgSite");
 
@@ -601,7 +632,7 @@ async function addTasks() {
 
 
 async function chgTasks(event) {
-  let elements = document.querySelectorAll(".Tskbtn, .backbtn, .addtskbtn, .deleteimg, .inspect");
+  let elements = document.querySelectorAll(".Tskbtn, .backbtn, .addtskbtn, .deleteimg, .inspect, .lstbtndiv, .actiondiv");
   elements.forEach(element => {
     element.parentNode.removeChild(element);
   });
@@ -711,7 +742,7 @@ async function chgTasks(event) {
 }
 
 async function reloadLists(){
-  let elements = document.querySelectorAll(".Lstbtn, .addlstbtn, .deleteimg, .editimg, .TskchgSite, .inspect");
+  let elements = document.querySelectorAll(".Lstbtn, .addlstbtn, .deleteimg, .editimg, .TskchgSite, .inspect, .lstbtndiv, .actiondiv");
     elements.forEach(element => {
       element.parentNode.removeChild(element);
     });
@@ -729,7 +760,7 @@ async function checkTask(event){
     };
     await updateTasks(checkTasksjs, checktaskid);
 
-    let elements = document.querySelectorAll(".Tskbtn, .backbtn, .addtskbtn, .deleteimg, .inspect");
+    let elements = document.querySelectorAll(".Tskbtn, .backbtn, .addtskbtn, .deleteimg, .inspect, .lstbtndiv, .actiondiv");
   elements.forEach(element => {
     element.parentNode.removeChild(element);
   });
@@ -746,7 +777,7 @@ async function checkTask(event){
     };
     await updateTasks( uncheckTasksjs, checktaskid);
 
-    let elements = document.querySelectorAll(".Tskbtn, .backbtn, .addtskbtn, .deleteimg, .inspect");
+    let elements = document.querySelectorAll(".Tskbtn, .backbtn, .addtskbtn, .deleteimg, .inspect, .lstbtndiv, .actiondiv");
   elements.forEach(element => {
     element.parentNode.removeChild(element);
   });

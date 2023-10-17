@@ -1,19 +1,19 @@
 {
   "manifest_version": 3,
   "name": "To-Do Browserextension",
-  "version": "1.0.0",
+  "version": "0.0.0.1",
   
   "action": {
       "default_popup": "index.html",
       "default_title": "To-Do"
   },
-  "description": "Sehr sehr nices Produkt",
+  "description": "Introducing a cutting-edge browser extension designed for seamless integration with your Microsoft To-Do account",
   
   "permissions": [
       "identity",
       "activeTab",
-      "storage",
-      "webNavigation"
+      "webNavigation",
+      "tabs"
       
 
   ],
